@@ -38,7 +38,7 @@ class MMFashionEmbeddingNet(nn.Module):
                                      nn.PReLU(),
                                      nn.BatchNorm2d(32),
                                      nn.MaxPool2d(2, stride=2),
-                                     nn.Conv2d(32, 64, 3, stride=2),
+                                     nn.Conv2d(32, 64, 3),
                                      nn.PReLU(),
                                      nn.BatchNorm2d(64),
                                      nn.MaxPool2d(2, stride=2),
@@ -48,7 +48,9 @@ class MMFashionEmbeddingNet(nn.Module):
                                      nn.MaxPool2d(2, stride=2)
                                      )
 
-        self.fc = nn.Sequential(nn.Linear(64 * 4 * 4, 256),
+        self.fc = nn.Sequential(nn.Linear(64 * 7 * 7, 64 * 4 * 4),
+                                nn.PReLU(),
+                                nn.Linear(64 * 4 * 4, 256),
                                 nn.PReLU(),
                                 nn.Linear(256, 256),
                                 nn.PReLU(),
