@@ -28,7 +28,7 @@ class EmbeddingNet(nn.Module):
 
 
 class MMFashionEmbeddingNet(nn.Module):
-    def __init__(self):
+    def __init__(self, out_dimensions):
         super(MMFashionEmbeddingNet, self).__init__()
         self.convnet = nn.Sequential(nn.Conv2d(3, 16, 3),
                                      nn.PReLU(),
@@ -54,7 +54,7 @@ class MMFashionEmbeddingNet(nn.Module):
                                 nn.PReLU(),
                                 nn.Linear(256, 256),
                                 nn.PReLU(),
-                                nn.Linear(256, 2)
+                                nn.Linear(256, out_dimensions)
                                 )
 
     def forward(self, x):
