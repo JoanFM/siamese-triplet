@@ -4,6 +4,7 @@ from PIL import Image
 
 from torch.utils.data import Dataset
 from torch.utils.data.sampler import BatchSampler
+import torch
 
 
 class SiameseMNIST(Dataset):
@@ -94,15 +95,15 @@ class SiameseMMFashion(SiameseMNIST):
         self.transform = self.mmfashion_dataset.transform
 
         if self.train:
-            self.train_labels = self.mmfashion_dataset.class_ids
+            self.train_labels = torch.tensor(self.mmfashion_dataset.class_ids)
             self.train_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.train_labels.numpy())
             self.label_to_indices = {label: np.where(self.train_labels.numpy() == label)[0]
                                      for label in self.labels_set}
         else:
             # generate fixed pairs for testing
-            self.test_labels = self.mnist_dataset.class_ids
-            self.test_data = self.mnist_dataset.img_list
+            self.test_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            self.test_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.test_labels.numpy())
             self.label_to_indices = {label: np.where(self.test_labels.numpy() == label)[0]
                                      for label in self.labels_set}
@@ -236,14 +237,14 @@ class TripletMMFashion(TripletMNIST):
         self.transform = self.mmfashion_dataset.transform
 
         if self.train:
-            self.train_labels = self.mmfashion_dataset.class_ids
+            self.train_labels = torch.tensor(self.mmfashion_dataset.class_ids)
             self.train_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.train_labels.numpy())
             self.label_to_indices = {label: np.where(self.train_labels.numpy() == label)[0]
                                      for label in self.labels_set}
 
         else:
-            self.test_labels = self.mmfashion_dataset.class_ids
+            self.test_labels = torch.tensor(self.mmfashion_dataset.class_ids)
             self.test_data = self.mmfashion_dataset.img_list
             # generate fixed triplets for testing
             self.labels_set = set(self.test_labels.numpy())
