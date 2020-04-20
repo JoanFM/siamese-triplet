@@ -17,8 +17,6 @@ def fit(train_loader, val_loader, model, loss_fn, optimizer, scheduler, n_epochs
         scheduler.step()
 
     for epoch in range(start_epoch, n_epochs):
-        scheduler.step()
-
         # Train stage
         train_loss, metrics = train_epoch(train_loader, model, loss_fn, optimizer, cuda, log_interval, metrics)
 
@@ -35,6 +33,7 @@ def fit(train_loader, val_loader, model, loss_fn, optimizer, scheduler, n_epochs
             message += '\t{}: {}'.format(metric.name(), metric.value())
 
         print(message)
+        scheduler.step()
 
 
 def train_epoch(train_loader, model, loss_fn, optimizer, cuda, log_interval, metrics):
@@ -45,11 +44,13 @@ def train_epoch(train_loader, model, loss_fn, optimizer, cuda, log_interval, met
     losses = []
     total_loss = 0
 
-    #for batch_idx, (data, target) in enumerate(train_loader):
     for loader in enumerate(train_loader):
         batch_idx = loader[0]
-        data = loader[1]['img']
-        target = loader[1]['target']
+        if type(loader[1]) is dict:
+            data = loader[1]['img']
+            target = loader[1]['target']
+        else:
+            (data, target) = loader[1]
         target = target if len(target) > 0 else None
         if not type(data) in (tuple, list):
             data = (data,)
@@ -102,8 +103,11 @@ def test_epoch(val_loader, model, loss_fn, cuda, metrics):
         val_loss = 0
         for loader in enumerate(val_loader):
             batch_idx = loader[0]
-            data = loader[1]['img']
-            target = loader[1]['target']
+            if type(loader[1]) is dict:
+                data = loader[1]['img']
+                target = loader[1]['target']
+            else:
+                (data, target) = loader[1]
             target = target if len(target) > 0 else None
             if not type(data) in (tuple, list):
                 data = (data,)
