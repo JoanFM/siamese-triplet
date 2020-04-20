@@ -10,7 +10,45 @@ class EmbeddingNet(nn.Module):
                                      nn.Conv2d(32, 64, 5), nn.PReLU(),
                                      nn.MaxPool2d(2, stride=2))
 
-        self.fc = nn.Sequential(nn.Linear(238144, 256), #64 * 4 * 4, 256),
+        self.fc = nn.Sequential(nn.Linear(64 * 4 * 4, 256),
+                                nn.PReLU(),
+                                nn.Linear(256, 256),
+                                nn.PReLU(),
+                                nn.Linear(256, 2)
+                                )
+
+    def forward(self, x):
+        output = self.convnet(x)
+        output = output.view(output.size()[0], -1)
+        output = self.fc(output)
+        return output
+
+    def get_embedding(self, x):
+        return self.forward(x)
+
+
+class MMFashionEmbeddingNet(nn.Module):
+    def __init__(self):
+        super(MMFashionEmbeddingNet, self).__init__()
+        self.convnet = nn.Sequential(nn.Conv2d(3, 16, 3),
+                                     nn.PReLU(),
+                                     nn.BatchNorm2d(16),
+                                     nn.MaxPool2d(2, stride=2),
+                                     nn.Conv2d(16, 32, 3),
+                                     nn.PReLU(),
+                                     nn.BatchNorm2d(32),
+                                     nn.MaxPool2d(2, stride=2),
+                                     nn.Conv2d(32, 64, 3, stride=2),
+                                     nn.PReLU(),
+                                     nn.BatchNorm2d(64),
+                                     nn.MaxPool2d(2, stride=2),
+                                     nn.Conv2d(64, 64, 3, stride=2),
+                                     nn.PReLU(),
+                                     nn.BatchNorm2d(64),
+                                     nn.MaxPool2d(2, stride=2)
+                                     )
+
+        self.fc = nn.Sequential(nn.Linear(64 * 4 * 4, 256),
                                 nn.PReLU(),
                                 nn.Linear(256, 256),
                                 nn.PReLU(),
