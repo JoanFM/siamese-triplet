@@ -91,7 +91,7 @@ class SiameseMMFashion(SiameseMNIST):
     def __init__(self, mmfashion_dataset, train):
         self.mmfashion_dataset = mmfashion_dataset
         self.train = train
-        self.transform = self.mnist_dataset.transform
+        self.transform = self.mmfashion_dataset.transform
 
         if self.train:
             self.train_labels = self.mmfashion_dataset.class_ids
