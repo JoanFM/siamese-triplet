@@ -5,6 +5,7 @@ import torch.nn.functional as F
 class EmbeddingNet(nn.Module):
     def __init__(self):
         super(EmbeddingNet, self).__init__()
+        self.out_dimensions = 2
         self.convnet = nn.Sequential(nn.Conv2d(3, 32, 5), nn.PReLU(),
                                      nn.MaxPool2d(2, stride=2),
                                      nn.Conv2d(32, 64, 5), nn.PReLU(),
@@ -30,6 +31,7 @@ class EmbeddingNet(nn.Module):
 class MMFashionEmbeddingNet(nn.Module):
     def __init__(self, out_dimensions):
         super(MMFashionEmbeddingNet, self).__init__()
+        self.out_dimensions = out_dimensions
         self.convnet = nn.Sequential(nn.Conv2d(3, 16, 3),
                                      nn.PReLU(),
                                      nn.BatchNorm2d(16),
@@ -86,7 +88,7 @@ class ClassificationNet(nn.Module):
         self.embedding_net = embedding_net
         self.n_classes = n_classes
         self.nonlinear = nn.PReLU()
-        self.fc1 = nn.Linear(2, n_classes)
+        self.fc1 = nn.Linear(embedding_net.out_dimensions, n_classes)
 
     def forward(self, x):
         output = self.embedding_net(x)
