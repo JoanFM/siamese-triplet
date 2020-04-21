@@ -1,6 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
-from torchvision.models import alexnet, resnet34
+from torchvision.models import alexnet, resnet34, resnet50, resnet101
 
 
 class EmbeddingNet(nn.Module):
@@ -124,6 +124,68 @@ class MMFashionEmbeddingResNet34(nn.Module):
 
     def forward(self, x):
         output = self.resnet34.forward(x)
+        return output
+
+    def get_embedding(self, x):
+        return self.forward(x)
+
+
+class MMFashionEmbeddingResNet50(nn.Module):
+    def __init__(self, out_dimensions):
+        super(MMFashionEmbeddingResNet50, self).__init__()
+        self.out_dimensions = out_dimensions
+        self.resnet50 = resnet50(pretrained=True)
+
+        self.resnet50.fc = nn.Sequential(
+                                nn.Linear(512, 256),
+                                nn.PReLU(),
+                                nn.Linear(256, 256),
+                                nn.PReLU(),
+                                nn.Linear(256, out_dimensions)
+                                )
+
+        for params in self.resnet50.parameters():
+            params.requires_grad = False
+
+        for params in self.resnet50.layer4.parameters():
+            params.requires_grad = True
+
+        for params in self.resnet50.fc.parameters():
+            params.requires_grad = True
+
+    def forward(self, x):
+        output = self.resnet50.forward(x)
+        return output
+
+    def get_embedding(self, x):
+        return self.forward(x)
+
+
+class MMFashionEmbeddingResNet101(nn.Module):
+    def __init__(self, out_dimensions):
+        super(MMFashionEmbeddingResNet101, self).__init__()
+        self.out_dimensions = out_dimensions
+        self.resnet101 = resnet101(pretrained=True)
+
+        self.resnet101.fc = nn.Sequential(
+                                nn.Linear(512, 256),
+                                nn.PReLU(),
+                                nn.Linear(256, 256),
+                                nn.PReLU(),
+                                nn.Linear(256, out_dimensions)
+                                )
+
+        for params in self.resnet101.parameters():
+            params.requires_grad = False
+
+        for params in self.resnet101.layer4.parameters():
+            params.requires_grad = True
+
+        for params in self.resnet101.fc.parameters():
+            params.requires_grad = True
+
+    def forward(self, x):
+        output = self.resnet101.forward(x)
         return output
 
     def get_embedding(self, x):
