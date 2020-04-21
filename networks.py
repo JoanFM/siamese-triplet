@@ -137,9 +137,9 @@ class MMFashionEmbeddingResNet50(nn.Module):
         self.resnet50 = resnet50(pretrained=True)
 
         self.resnet50.fc = nn.Sequential(
-                                nn.Linear(512, 256),
+                                nn.Linear(2048, 512),
                                 nn.PReLU(),
-                                nn.Linear(256, 256),
+                                nn.Linear(512, 256),
                                 nn.PReLU(),
                                 nn.Linear(256, out_dimensions)
                                 )
@@ -168,9 +168,9 @@ class MMFashionEmbeddingResNet101(nn.Module):
         self.resnet101 = resnet101(pretrained=True)
 
         self.resnet101.fc = nn.Sequential(
-                                nn.Linear(512, 256),
+                                nn.Linear(2048, 512),
                                 nn.PReLU(),
-                                nn.Linear(256, 256),
+                                nn.Linear(512, 256),
                                 nn.PReLU(),
                                 nn.Linear(256, out_dimensions)
                                 )
