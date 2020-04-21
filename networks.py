@@ -1,5 +1,6 @@
 import torch.nn as nn
 import torch.nn.functional as F
+from torchvision.models import alexnet
 
 
 class EmbeddingNet(nn.Module):
@@ -63,6 +64,37 @@ class MMFashionEmbeddingNet(nn.Module):
         output = self.convnet(x)
         output = output.view(output.size()[0], -1)
         output = self.fc(output)
+        return output
+
+    def get_embedding(self, x):
+        return self.forward(x)
+
+
+class MMFashionEmbeddingAlexNet(nn.Module):
+    def __init__(self, out_dimensions):
+        super(MMFashionEmbeddingNet, self).__init__()
+        self.out_dimensions = out_dimensions
+        self.alexnet = alexnet(pretrained=True)
+
+        self.alexnet.classifier = nn.Sequential(nn.Linear(64 * 7 * 7, 64 * 4 * 4),
+                                nn.PReLU(),
+                                nn.Linear(64 * 4 * 4, 256),
+                                nn.PReLU(),
+                                nn.Linear(256, 256),
+                                nn.PReLU(),
+                                nn.Linear(256, out_dimensions)
+                                )
+
+        for params in self.alexnet.features.parameters():
+            params.requires_grad = False
+
+        for params in list(self.alexnet.features.parameters())[-4:]:
+            params.requires_grad = True
+
+    def forward(self, x):
+        output = self.alexnet.features(x)
+        output = output.view(output.size()[0], -1)
+        output = self.alexnet.classifier(output)
         return output
 
     def get_embedding(self, x):
