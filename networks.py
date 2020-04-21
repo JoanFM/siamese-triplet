@@ -105,12 +105,12 @@ class MMFashionEmbeddingResNet34(nn.Module):
         self.out_dimensions = out_dimensions
         self.resnet34 = resnet34(pretrained=True)
 
-        self.resnet34.fc = nn.Sequential(nn.Linear(nn.Linear(512, 256),
-                                                   nn.PReLU(),
-                                                   nn.Linear(256, 256),
-                                                   nn.PReLU(),
-                                                   nn.Linear(256, out_dimensions)
-                                                   ))
+        self.resnet34.fc = nn.Sequential(nn.Linear(512, 256),
+                                         nn.PReLU(),
+                                         nn.Linear(256, 256),
+                                         nn.PReLU(),
+                                         nn.Linear(256, out_dimensions)
+                                         )
 
         for params in self.resnet34.parameters():
             params.requires_grad = False
