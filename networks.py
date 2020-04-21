@@ -92,9 +92,7 @@ class MMFashionEmbeddingAlexNet(nn.Module):
             params.requires_grad = True
 
     def forward(self, x):
-        output = self.alexnet.features(x)
-        output = output.view(output.size()[0], -1)
-        output = self.alexnet.classifier(output)
+        output = self.alexnet.forward(x)
         return output
 
     def get_embedding(self, x):
