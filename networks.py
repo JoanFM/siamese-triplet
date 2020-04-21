@@ -76,14 +76,14 @@ class MMFashionEmbeddingAlexNet(nn.Module):
         self.out_dimensions = out_dimensions
         self.alexnet = alexnet(pretrained=True)
 
-        self.alexnet.classifier = nn.Sequential(nn.Linear(64 * 7 * 7, 64 * 4 * 4),
-                                nn.PReLU(),
-                                nn.Linear(64 * 4 * 4, 256),
-                                nn.PReLU(),
-                                nn.Linear(256, 256),
-                                nn.PReLU(),
-                                nn.Linear(256, out_dimensions)
-                                )
+        self.alexnet.classifier = nn.Sequential(nn.Linear(256 * 6 * 6, 64 * 4 * 4),
+                                                nn.PReLU(),
+                                                nn.Linear(64 * 4 * 4, 256),
+                                                nn.PReLU(),
+                                                nn.Linear(256, 256),
+                                                nn.PReLU(),
+                                                nn.Linear(256, out_dimensions)
+                                                )
 
         for params in self.alexnet.features.parameters():
             params.requires_grad = False
