@@ -72,7 +72,7 @@ class MMFashionEmbeddingNet(nn.Module):
 
 class MMFashionEmbeddingAlexNet(nn.Module):
     def __init__(self, out_dimensions):
-        super(MMFashionEmbeddingNet, self).__init__()
+        super(MMFashionEmbeddingAlexNet, self).__init__()
         self.out_dimensions = out_dimensions
         self.alexnet = alexnet(pretrained=True)
 
