@@ -89,20 +89,26 @@ class SiameseMNIST(Dataset):
 
 class SiameseMMFashion(SiameseMNIST):
 
-    def __init__(self, mmfashion_dataset, train):
+    def __init__(self, mmfashion_dataset, train, classes=True):
         self.mmfashion_dataset = mmfashion_dataset
         self.train = train
         self.transform = self.mmfashion_dataset.transform
 
         if self.train:
-            self.train_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            if classes:
+                self.train_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            else:
+                self.train_labels = torch.tensor(self.mmfashion_dataset.ids)
             self.train_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.train_labels.numpy())
             self.label_to_indices = {label: np.where(self.train_labels.numpy() == label)[0]
                                      for label in self.labels_set}
         else:
             # generate fixed pairs for testing
-            self.test_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            if classes:
+                self.test_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            else:
+                self.test_labels = torch.tensor(self.mmfashion_dataset.ids)
             self.test_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.test_labels.numpy())
             self.label_to_indices = {label: np.where(self.test_labels.numpy() == label)[0]
@@ -231,20 +237,26 @@ class TripletMNIST(Dataset):
 
 class TripletMMFashion(TripletMNIST):
 
-    def __init__(self, mmfashion_dataset, train):
+    def __init__(self, mmfashion_dataset, train, classes=True):
         self.mmfashion_dataset = mmfashion_dataset
         self.train = train
         self.transform = self.mmfashion_dataset.transform
 
         if self.train:
-            self.train_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            if classes:
+                self.train_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            else:
+                self.train_labels = torch.tensor(self.mmfashion_dataset.ids)
             self.train_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.train_labels.numpy())
             self.label_to_indices = {label: np.where(self.train_labels.numpy() == label)[0]
                                      for label in self.labels_set}
 
         else:
-            self.test_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            if classes:
+                self.test_labels = torch.tensor(self.mmfashion_dataset.class_ids)
+            else:
+                self.test_labels = torch.tensor(self.mmfashion_dataset.ids)
             self.test_data = self.mmfashion_dataset.img_list
             # generate fixed triplets for testing
             self.labels_set = set(self.test_labels.numpy())
