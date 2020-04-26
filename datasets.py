@@ -98,7 +98,7 @@ class SiameseMMFashion(SiameseMNIST):
             if classes:
                 self.train_labels = torch.tensor(self.mmfashion_dataset.class_ids)
             else:
-                self.train_labels = torch.tensor(self.mmfashion_dataset.idx2id)
+                self.train_labels = torch.tensor(self.mmfashion_dataset.idx2id.values())
             self.train_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.train_labels.numpy())
             self.label_to_indices = {label: np.where(self.train_labels.numpy() == label)[0]
@@ -108,7 +108,7 @@ class SiameseMMFashion(SiameseMNIST):
             if classes:
                 self.test_labels = torch.tensor(self.mmfashion_dataset.class_ids)
             else:
-                self.test_labels = torch.tensor(self.mmfashion_dataset.idx2id)
+                self.test_labels = torch.tensor(self.mmfashion_dataset.idx2id.values())
             self.test_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.test_labels.numpy())
             self.label_to_indices = {label: np.where(self.test_labels.numpy() == label)[0]
@@ -246,7 +246,7 @@ class TripletMMFashion(TripletMNIST):
             if classes:
                 self.train_labels = torch.tensor(self.mmfashion_dataset.class_ids)
             else:
-                self.train_labels = torch.tensor(self.mmfashion_dataset.idx2id)
+                self.train_labels = torch.tensor(self.mmfashion_dataset.idx2id.values())
             self.train_data = self.mmfashion_dataset.img_list
             self.labels_set = set(self.train_labels.numpy())
             self.label_to_indices = {label: np.where(self.train_labels.numpy() == label)[0]
@@ -256,7 +256,7 @@ class TripletMMFashion(TripletMNIST):
             if classes:
                 self.test_labels = torch.tensor(self.mmfashion_dataset.class_ids)
             else:
-                self.test_labels = torch.tensor(self.mmfashion_dataset.idx2id)
+                self.test_labels = torch.tensor(self.mmfashion_dataset.idx2id.values())
             self.test_data = self.mmfashion_dataset.img_list
             # generate fixed triplets for testing
             self.labels_set = set(self.test_labels.numpy())
